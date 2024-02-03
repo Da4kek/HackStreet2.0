@@ -5,6 +5,7 @@ import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from nltk.corpus import stopwords
 from sklearn.model_selection import GridSearchCV
 
@@ -35,28 +36,32 @@ class TextClassifier:
         tfidf = TfidfVectorizer(strip_accents=None,
                                 lowercase=False,
                                 preprocessor=None)
-        param_grid = [{"vect__ngram_range": [(1, 1)],
-                       "vect__stop_words": [stop, None],
-                       "clf__penalty": ['l1', 'l2'],
-                       "clf__C": [1.0, 10.0, 100.0],
-                       "vect__tokenizer": [tokenizer, tokenizer_port]},
-                      {"vect__ngram_range": [(1, 1)],
-                       "vect__stop_words": [stop, None],
-                       "vect__tokenizer": [tokenizer, tokenizer_port],
-                       "vect__norm": [None],
-                       "vect__use_idf": [False],
-                       "clf__penalty": ['l1', 'l2'],
-                       "clf__C": [1.0, 10.0, 100.0]}]
-        lr_tfidf = Pipeline([("vect", tfidf),
-                             ("clf", LogisticRegression(random_state=0, solver='liblinear'))])
+        param_grid = [{'vect__ngram_range':[(1,1)],
+                    'vect__stop_words':[None,stop],
+                    'vect__tokenizer':[tokenizer,tokenizer_port],
+                    'svm__C':[1.0,2.0,3.0,4.0,5.0],
+                    'svm__kernel':['linear','rbf'],
+                    'svm__gamma':['auto','scale'],
+                    },
+                    {'vect__ngram_range':[(1,1)],
+                    'vect__stop_words':[None,stop],
+                    'vect__tokenizer':[tokenizer,tokenizer_port],
+                    'vect__norm':[None],
+                    'vect__use_idf':[False],
+                    'svm__C':[1.0,2.0,3.0,4.0,5.0,6.0],
+                    'svm__kernel':['linear','rbf'],
+                    'svm__gamma':['auto','scale']}]
 
+        ps_svm_tf = Pipeline([("vect",tfidf),
+                            ("svm",SVC(random_state=1))])
 
-        gs_lr_tfidf = GridSearchCV(lr_tfidf, param_grid, scoring='accuracy',
-                           cv=5,
-                           verbose=1,
-                           n_jobs=-1)
-        gs_lr_tfidf.fit(X_train, y_train)
-        self.model = gs_lr_tfidf.best_estimator_
+        grid_svm_tf = GridSearchCV(ps_svm_tf,param_grid,
+                                cv=5,
+                                verbose=1,
+                                n_jobs=-1,
+                                scoring='accuracy')
+        grid_svm_tf.fit(X_train, y_train)
+        self.model = grid_svm_tf.best_estimator_
         print("Train accuracy: ", self.model.score(X_train, y_train))
         print("Test accuracy: ", self.model.score(X_test, y_test))
 
