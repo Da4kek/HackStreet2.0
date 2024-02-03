@@ -1,5 +1,6 @@
 import re  
 from nltk.stem.porter import PorterStemmer
+import itertools
 
 porter = PorterStemmer()
 
@@ -14,3 +15,4 @@ def tokenizer(text):
 
 def tokenizer_port(text):
     return [porter.stem(word) for word in text.split()]
+

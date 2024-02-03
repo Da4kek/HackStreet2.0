@@ -1,7 +1,7 @@
 import streamlit as st
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import nltk
-nltk.download('vader_lexicon')
+from Utils import misc
 
 sid = SentimentIntensityAnalyzer()
 
@@ -43,4 +43,5 @@ def main():
 
 
 if __name__ == '__main__':
+    misc.initiate_senti_analyzer()
     main()
