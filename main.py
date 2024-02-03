@@ -4,6 +4,10 @@ import nltk
 from Utils import misc
 from streamlit_player import st_player 
 
+from joblib import load 
+
+model = load("Data/model.pkl")
+
 sid = SentimentIntensityAnalyzer()
 
 
