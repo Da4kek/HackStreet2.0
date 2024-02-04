@@ -65,7 +65,7 @@ def main():
             st.write("Here's a helpline number: +91 9999 666 555", )
         else:
             emotion = model.predict([user_input])
-            st.write(f'Emotional Classification: {emotion[0]}')    
+            st.subheader(f'Emotional Classification: {emotion[0]}')    
 
 def sentiment():
     if user_input:
