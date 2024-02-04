@@ -46,7 +46,7 @@ main.py -- Contains the streamlit framework
 streamlit run main.py
 ```
 
-## Explanation
+## MoodUp - Explanation Video
 
 | [![Video](Screenshots/1.PNG)](https://www.youtube.com/watch?v=7NCwnOCZK5U)| 
 | :--: |
