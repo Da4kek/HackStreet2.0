@@ -57,7 +57,8 @@ def main():
     user_input = st.text_input("", placeholder="Enter here...")
     if user_input:
         emotion = model.predict([user_input])
-        st.write(f'Emotional Classification: {emotion}')       
+        emo = (f'Emotional Classification: {emotion[0]}')
+        st.subheader(emo)     
 
         
 def sentiment():
@@ -297,7 +298,9 @@ def neutral():
 
 def final_evaluation() : 
     st.header("We hope the suggestions helped you out ! Do you feel better now ?")
-    st.button("I feel great!", key = "bye")
+    good ,bad = st.columns(2)
+    with good:
+        st.button("I feel great!", key = "bye")
     st.button("I still don't feel better...", key = "helplines")
 
     if st.session_state.get("bye"):
@@ -309,15 +312,15 @@ def final_evaluation() :
         found1, found2, found3 = st.columns(3)
 
         with found1:
-            st.header*("The livelovelaugh foundation")
+            st.header("The livelovelaugh foundation")
             st_player("https://youtu.be/rK0ALlJBdMQ?si=ryry2f2ER1ABN5Ik")
             st.link_button("Contact","https://www.thelivelovelaughfoundation.org/")   
         with found2:
-            st.header*("Mental Health foundation India")
+            st.header("Mental Health foundation India")
             st_player("https://youtu.be/YApr7jNxjL4")
             st.link_button("Contact","https://mhfindia.org/")   
         with found3:
-            st.header*("Minds Foundation")
+            st.header("The Minds Foundation India")
             st_player("https://youtu.be/J89L80N45wM")
             st.link_button("Contact","https://www.mindsfoundation.org/") 
 
