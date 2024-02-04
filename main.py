@@ -59,7 +59,6 @@ def main():
     st.subheader("How are you feeling right now ? ")
     user_input = st.text_input("", placeholder="Enter here...")
     if user_input:
-        print(bad_words)
         if any(word.lower() in bad_words for word in user_input.split()):
 
             st.write("Your thoughts seem concerning. Please reach out to a helpline for support.")
