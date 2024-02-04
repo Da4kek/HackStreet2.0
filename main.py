@@ -12,9 +12,6 @@ import random
 from joblib import load 
 
 model = load("Data/model.pkl")
-word_list = "Data/extreme.txt"
-with open(word_list , 'r') as file:
-    bad_words = set(file.read().splitlines())
 sid = SentimentIntensityAnalyzer()
 st.set_page_config(page_title = "MoodUp" ,page_icon = ":relieved_face:",layout = "wide")
 def load_lottiefile(filepath : str):
@@ -53,16 +50,24 @@ def classify_emotion(text):
 st.title('MoodUp - your comfort place to elevate your mood')
 
 def main():
+    word_list = "Data/extreme.txt"
+    with open(word_list, 'r') as file:
+        bad_words = list(file.read().splitlines())
+
     global emotion
     global user_input
     st.subheader("How are you feeling right now ? ")
     user_input = st.text_input("", placeholder="Enter here...")
     if user_input:
+        print(bad_words)
+        if any(word.lower() in bad_words for word in user_input.split()):
 
-        emotion = model.predict([user_input])
-        st.write(f'Emotional Classification: {emotion[0]}')       
+            st.write("Your thoughts seem concerning. Please reach out to a helpline for support.")
+            st.write("Here's a helpline number: +91 9999 666 555", )
+        else:
+            emotion = model.predict([user_input])
+            st.write(f'Emotional Classification: {emotion[0]}')    
 
-        
 def sentiment():
     if user_input:
         st.header("What is your feeling in response to the above event ?")
@@ -84,9 +89,6 @@ def sentiment():
         elif st.session_state.get("neutral"):
             neutral()
         
-        if any(word.lower() in bad_words for word in user_input.split()):
-            st.write("Your thoughts seem concerning. Please reach out to a helpline for support.")
-            st.write("Here's a helpline number: +91 9999 666 555", )
 
         final_evaluation()
     
@@ -319,15 +321,15 @@ def final_evaluation() :
         found1, found2, found3 = st.columns(3)
 
         with found1:
-            st.header*("The livelovelaugh foundation")
+            st.header("The livelovelaugh foundation")
             st_player("https://youtu.be/rK0ALlJBdMQ?si=ryry2f2ER1ABN5Ik")
             st.link_button("Contact","https://www.thelivelovelaughfoundation.org/")   
         with found2:
-            st.header*("Mental Health foundation India")
+            st.header("Mental Health foundation India")
             st_player("https://youtu.be/YApr7jNxjL4")
             st.link_button("Contact","https://mhfindia.org/")   
         with found3:
-            st.header*("Minds Foundation")
+            st.header("Minds Foundation")
             st_player("https://youtu.be/J89L80N45wM")
             st.link_button("Contact","https://www.mindsfoundation.org/") 
 
