@@ -1,7 +1,7 @@
 # Mental Health Analyzer
 
 
-![Screenshots/1.PNG](Screenshots/1.PNG)
+![Screenshots/1.PNG](Screenshots/2.PNG)
 
 ![Screenshots2](Screenshots/4.PNG)
 
@@ -48,4 +48,6 @@ streamlit run main.py
 
 ## Explanation
 
-[![Video](https://img.youtube.com/vi/7NCwnOCZK5U/0.jpg)](https://www.youtube.com/watch?v=7NCwnOCZK5U)
+| [![Video](Screenshots/1.PNG)](https://www.youtube.com/watch?v=7NCwnOCZK5U)| 
+| :--: |
+| *Explanation video* |
