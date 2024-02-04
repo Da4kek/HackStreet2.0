@@ -8,23 +8,22 @@ import json
 import requests
 import base64
 from PIL import Image
-
+import random
 from joblib import load 
 
 model = load("Data/model.pkl")
-
 sid = SentimentIntensityAnalyzer()
 st.set_page_config(page_title = "MoodUp" ,page_icon = ":relieved_face:",layout = "wide")
 def load_lottiefile(filepath : str):
     with open(filepath,"r") as f:
         return json.load(f)
     
-lottie_coding = load_lottiefile("C:/Users/Navneeth/Desktop/Me/Hackathons/HackStreet_2.0/HackStreet2.0/mindful.json")
+lottie_coding = load_lottiefile("mindful.json")
 
 page_bg_img = """
 <style>
 [data-testid="stAppViewContainer"]{
-    background-image: url("C:/Users/Navneeth/Desktop/Me/Hackathons/HackStreet_2.0/HackStreet2.0/background.jpg");
+    background-image: url("background.jpg");
     background-size: cover;
 
 }
@@ -51,16 +50,23 @@ def classify_emotion(text):
 st.title('MoodUp - your comfort place to elevate your mood')
 
 def main():
+    word_list = "Data/extreme.txt"
+    with open(word_list, 'r') as file:
+        bad_words = list(file.read().splitlines())
+
     global emotion
     global user_input
     st.subheader("How are you feeling right now ? ")
     user_input = st.text_input("", placeholder="Enter here...")
     if user_input:
-        emotion = model.predict([user_input])
-        emo = (f'Emotional Classification: {emotion[0]}')
-        st.subheader(emo)     
+        if any(word.lower() in bad_words for word in user_input.split()):
 
-        
+            st.write("Your thoughts seem concerning. Please reach out to a helpline for support.")
+            st.write("Here's a helpline number: +91 9999 666 555", )
+        else:
+            emotion = model.predict([user_input])
+            st.write(f'Emotional Classification: {emotion[0]}')    
+
 def sentiment():
     if user_input:
         st.header("What is your feeling in response to the above event ?")
@@ -81,7 +87,11 @@ def sentiment():
     
         elif st.session_state.get("neutral"):
             neutral()
+        
+
         final_evaluation()
+    
+
 
 def positive():
     if(emotion == "Elation"): 
@@ -323,8 +333,6 @@ def final_evaluation() :
             st.header("The Minds Foundation India")
             st_player("https://youtu.be/J89L80N45wM")
             st.link_button("Contact","https://www.mindsfoundation.org/") 
-
-
 
 
 if __name__ == '__main__':
