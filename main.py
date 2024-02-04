@@ -8,23 +8,25 @@ import json
 import requests
 import base64
 from PIL import Image
-
+import random
 from joblib import load 
 
 model = load("Data/model.pkl")
-
+word_list = "Data/extreme.txt"
+with open(word_list , 'r') as file:
+    bad_words = set(file.read().splitlines())
 sid = SentimentIntensityAnalyzer()
 st.set_page_config(page_title = "MoodUp" ,page_icon = ":relieved_face:",layout = "wide")
 def load_lottiefile(filepath : str):
     with open(filepath,"r") as f:
         return json.load(f)
     
-lottie_coding = load_lottiefile("C:/Users/Navneeth/Desktop/Me/Hackathons/HackStreet_2.0/HackStreet2.0/mindful.json")
+lottie_coding = load_lottiefile("mindful.json")
 
 page_bg_img = """
 <style>
 [data-testid="stAppViewContainer"]{
-    background-image: url("C:/Users/Navneeth/Desktop/Me/Hackathons/HackStreet_2.0/HackStreet2.0/background.jpg");
+    background-image: url("background.jpg");
     background-size: cover;
 
 }
@@ -56,8 +58,9 @@ def main():
     st.subheader("How are you feeling right now ? ")
     user_input = st.text_input("", placeholder="Enter here...")
     if user_input:
+
         emotion = model.predict([user_input])
-        st.write(f'Emotional Classification: {emotion}')       
+        st.write(f'Emotional Classification: {emotion[0]}')       
 
         
 def sentiment():
@@ -80,7 +83,14 @@ def sentiment():
     
         elif st.session_state.get("neutral"):
             neutral()
+        
+        if any(word.lower() in bad_words for word in user_input.split()):
+            st.write("Your thoughts seem concerning. Please reach out to a helpline for support.")
+            st.write("Here's a helpline number: +91 9999 666 555", )
+
         final_evaluation()
+    
+
 
 def positive():
     if(emotion == "Elation"): 
